@@ -33,6 +33,7 @@ use Cake\ORM\Association\HasMany;
 use Cake\ORM\Association\HasOne;
 use Cake\ORM\Entity;
 use Cake\ORM\Query;
+use Cake\ORM\ResultSet;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\SaveOptionsBuilder;
 use Cake\ORM\Table;
@@ -6832,6 +6833,19 @@ class TableTest extends TestCase
         } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $this->assertSame($entity, $e->getEntity());
         }
+    }
+
+    /**
+     * Testing that a find with an empty OR won't cause a problem
+     *
+     * @return void
+     */
+    public function testFindWithEmptyOr()
+    {
+        $table = $this->getTableLocator()->get('users');
+        $result = $table->find()->where(['OR' => []])->all();
+
+        $this->assertInstanceOf(ResultSet::class, $result);
     }
 
     /**
